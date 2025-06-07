@@ -3,5 +3,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../bootstrap/
-  - flux-kustomiztion.yaml
+  - flux-kustomization.yaml
   - infrastructure-kustomization.yaml
