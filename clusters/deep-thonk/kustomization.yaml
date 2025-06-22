@@ -5,3 +5,4 @@ resources:
   - ../bootstrap/
   - flux-kustomization.yaml
   - infrastructure-kustomization.yaml
+  - application-kustomization.yaml
