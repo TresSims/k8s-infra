@@ -4,4 +4,6 @@ kind: Kustomization
 resources:
   - gateway-api-crds.yaml
   - traefik-gatewayapi-rbac.yaml
+  - traefik-release.yaml
+  - traefik-namespace.yaml
 

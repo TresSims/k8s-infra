@@ -1,0 +1,38 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 1m0s
+  chart:
+    spec:
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: "flux-system"
+  releaseName: traefik
+  values:
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
+    ingressRoute:
+      dashboard:
+        enabled: true
+        matchRule: Host(`dashboard.k8s.deep-thonk.com`)
+        entryPoints:
+          - web
+    providers:
+      kubernetesGateway:
+        enabled: true
+    gateway:
+      namespacePolicy: All
+    ports:
+      web:
+        exposedPort: 81
+      websecure:
+        exposedPort: 444
+    service:
+      type: NodePort
