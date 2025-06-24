@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: traefik
-  namespace: traefik
+  namespace: ingress-system
 spec:
   interval: 1m0s
   chart:
@@ -34,5 +34,3 @@ spec:
         exposedPort: 81
       websecure:
         exposedPort: 444
-    service:
-      type: NodePort

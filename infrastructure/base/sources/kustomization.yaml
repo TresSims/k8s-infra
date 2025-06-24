@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - jetstack.yaml
   - traefik.yaml
+  - metallb.yaml
