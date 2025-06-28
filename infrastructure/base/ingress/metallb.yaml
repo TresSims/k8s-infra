@@ -15,3 +15,12 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: metallb
+  ---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: metallb-addr-pool
+  namespace: ingress-system
+spec:
+  addresses:
+    - 192.168.2.0/25
