@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: nfs-csi-helm
-        namespace: kube-system
+        namespace: nfs-csi
       interval: 10m
   values:
     hubble:
