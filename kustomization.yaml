@@ -1,0 +1,29 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+sync:
+  kind: OciRepository
+  url: oci://ghcr.io/tressims/k8s-infra
+  ref: latest
+  path: .
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: OciRepository
+    name: podinfo
+  path: "."
+  prune: true
+  timeout: 1m
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources: []
