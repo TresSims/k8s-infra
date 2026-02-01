@@ -27,21 +27,21 @@ jobs:
       - name: Build artifact
         run: |
           flux push artifact \
-            oci://ghcr.io/${{steps.case.outputs.lowercase}}:${{git rev-parse --short HEAD}} \
+            oci://ghcr.io/${{steps.case.outputs.lowercase}}:$(git rev-parse --short HEAD) \
             --source="$(git config --get remote.origin.url)" \
-            --revision="$(git branch --show-current)@sha1:${{git rev-parse HEAD}}"
+            --revision="$(git branch --show-current)@sha1:$(git rev-parse HEAD)" \
             --creds flux:${{ secrets.GITHUB_TOKEN }} \
             --path="./"
       - name: Tag Semver
         run: |
           flux tag artifact \
-          oci://ghcr.io/${{steps.case.outputs.lowercase}}:${{git rev-parse --short HEAD}} \
+          oci://ghcr.io/${{steps.case.outputs.lowercase}}:$(git rev-parse --short HEAD) \
           --creds flux:${{ secrets.GITHUB_TOKEN }} \
           --tag ${{ steps.semver.outputs.next }}
       - name: Tag Latest
         run: |
           flux tag artifact \
-          oci://ghcr.io/${{steps.case.outputs.lowercase}}:${{git rev-parse --short HEAD}} \
+          oci://ghcr.io/${{steps.case.outputs.lowercase}}:$(git rev-parse --short HEAD) \
           --creds flux:${{ secrets.GITHUB_TOKEN }} \
           --tag latest
       - name: Create Release
