@@ -17,6 +17,7 @@ jobs:
         with:
             token: ${{ github.token }}
             branch: main
+            fallbackTag: v0.0.0
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
       - name: Change case for image
