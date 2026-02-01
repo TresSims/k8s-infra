@@ -4,11 +4,20 @@ kind: FluxInstance
 metadata:
   name: flux
   namespace: flux-system
-sync:
-  kind: OciRepository
-  url: oci://ghcr.io/tressims/k8s-infra
-  ref: latest
-  path: .
+spec:
+  distribution:
+    version: 2.x
+    registry: ghcr.io/fluxcd
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+  sync:
+    kind: OCIRepository
+    url: oci://ghcr.io/tressims/k8s-infra
+    ref: latest
+    path: .
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
