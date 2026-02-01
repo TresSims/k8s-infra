@@ -18,4 +18,12 @@ spec:
   values:
     hubble:
       enabled: true
+    ingressController:
+      enabled: true
+      default: true
+    egressGateway:
+      enabled: true
+    bpf:
+      masquerade: true
+    kubeProxyReplacement: true
 
