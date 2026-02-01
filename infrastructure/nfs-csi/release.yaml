@@ -16,8 +16,6 @@ spec:
         namespace: nfs-csi
       interval: 10m
   values:
-    storageClass:
-      create: true
     storageClasses:
       - name: nfs-retain
         parameters:
