@@ -16,6 +16,14 @@ spec:
         namespace: nfs-csi
       interval: 10m
   values:
-    hubble:
-      enabled: true
-
+    storageClass:
+      create: true
+    storageClasses:
+      - name: nfs-retain
+        parameters:
+          server: deep-thonk.com
+          share: /mnt/plex/k8s
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        mountOptions:
+          - nfsvers=4.1
