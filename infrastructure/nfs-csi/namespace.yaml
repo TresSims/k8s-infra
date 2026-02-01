@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  Name: nfs-csi
+  name: nfs-csi
