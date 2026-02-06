@@ -26,4 +26,5 @@ spec:
     bpf:
       masquerade: true
     kubeProxyReplacement: true
-
+    l2announcements:
+      enabled: true
