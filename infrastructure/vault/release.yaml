@@ -19,7 +19,7 @@ spec:
   values:
     global:
       enabled: true
-      tlsDisable: true
+      tlsDisable: false
       resources:
         requests:
           memory: 256Mi
