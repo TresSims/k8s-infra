@@ -27,6 +27,9 @@ spec:
           memory: 256Mi
           cpu: 250m
 
+      ingress:
+        enabled: true
+
     server:
       resources:
         requests:
@@ -42,6 +45,3 @@ spec:
       serviceType: "ClusterIP"
       serviceNodePort: null
       externalPort: 443
-
-    ingress:
-      enabled: true
