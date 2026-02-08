@@ -25,4 +25,4 @@ spec:
 
     ingress:
       enabled: true
-      hostName: infisical.deep-thonk.com
+      hostName: infisical.k8s.deep-thonk.com
