@@ -18,7 +18,7 @@ spec:
   values:
     global:
       enabled: true
-      tlsDisable: false
+      tlsDisable: true
       resources:
         requests:
           memory: 256Mi
@@ -26,19 +26,14 @@ spec:
         limits:
           memory: 256Mi
           cpu: 250m
-
+    
     server:
-      resources:
-        requests:
-          memory: 8Gi
-          cpu: 2000m
-        limits:
-          memory: 16Gi
-          cpu: 2000m
+      ingress:
+        enabled: true
 
     # Vault UI
     ui:
       enabled: true
-      serviceType: "LoadBalancer"
+      serviceType: "ClusterIP"
       serviceNodePort: null
       externalPort: 443
