@@ -27,9 +27,6 @@ spec:
           memory: 256Mi
           cpu: 250m
 
-      ingress:
-        enabled: true
-
     server:
       resources:
         requests:
@@ -42,6 +39,6 @@ spec:
     # Vault UI
     ui:
       enabled: true
-      serviceType: "ClusterIP"
+      serviceType: "LoadBalancer"
       serviceNodePort: null
       externalPort: 443
