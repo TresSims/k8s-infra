@@ -30,6 +30,9 @@ spec:
     server:
       ingress:
         enabled: true
+        hosts:
+          - host: vault.k8s.deep-thonk.com
+            paths: []
 
     # Vault UI
     ui:
