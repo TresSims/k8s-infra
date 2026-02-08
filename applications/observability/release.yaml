@@ -22,3 +22,7 @@ spec:
         cert-manager.io/issuer: "letsencrypt-staging"
       hosts:
         - grafana.k8s.deep-thonk.com
+      tls:
+        - secretName: grafana-tls
+          hosts:
+            - grafana.k8s.deep-thonk.com
