@@ -19,7 +19,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        cert-manager.io/issuer: "letsencrypt-staging"
+        cert-manager.io/clusterissuer: "letsencrypt-staging"
       hosts:
         - grafana.k8s.deep-thonk.com
       tls:
