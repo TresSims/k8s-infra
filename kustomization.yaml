@@ -4,3 +4,4 @@ resources:
   - flux-sync.yaml
   - infrastructure.yaml
   - configuration.yaml
+  - applications.yaml
