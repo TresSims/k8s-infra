@@ -17,10 +17,6 @@ spec:
       interval: 10m
   values:
     infisical:
-      image:
-        repository: infisical/infisical
-        tag: "v0.151.0"
-        pullPolicy: IfNotPresent
       replicaCount: 2
 
     ingress:
