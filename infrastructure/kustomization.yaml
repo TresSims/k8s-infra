@@ -4,5 +4,5 @@ kind: Kustomization
 resources: 
   - cilium
   - nfs-csi
-  - vault
   - metallb
+  - cert-manager
