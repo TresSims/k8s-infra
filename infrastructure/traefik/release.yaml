@@ -19,3 +19,6 @@ spec:
     providers:
       kubernetesIngress:
         enabled: true
+    logs:
+      general:
+        level: DEBUG
