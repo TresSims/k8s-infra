@@ -27,7 +27,7 @@ spec:
     email: tres.sims95@gmail.com
     profile: tlsserver
     privateKeySecretRef:
-      name: letsencrypt-staging
+      name: letsencrypt-prod
     solvers:
       - dns01:
           cloudflare:
