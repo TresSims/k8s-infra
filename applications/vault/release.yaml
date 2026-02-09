@@ -25,12 +25,12 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: "letsencrypt-staging"
         hosts:
-          - vault.k8s.deep-thonk.com
+          - hots: vault.k8s.deep-thonk.com
+            path: /
         tls:
           - secretName: vault-tls
             hosts:
               - vault.k8s.deep-thonk.com
-          
     ui:
       enabled: true
       serviceType: "ClusterIP"
