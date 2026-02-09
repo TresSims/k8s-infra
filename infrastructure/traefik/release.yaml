@@ -1,0 +1,15 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  chartRef:
+    kind: HelmRepository
+    name: traefik-helm
+  interval: 10m
+  values:
+    providers:
+      kubernetesIngress:
+        enabled: true
