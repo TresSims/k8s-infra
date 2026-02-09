@@ -22,7 +22,7 @@ spec:
           enabled: true
           method: cronJob
           certValidDuration: 1095
-          schedule: 0 0 */4 *
+          schedule: 0 0 1 */4 *
       enabled: true
       relay:
         enabled: true
