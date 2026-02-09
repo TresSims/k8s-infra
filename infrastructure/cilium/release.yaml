@@ -23,8 +23,8 @@ spec:
       ui:
         enabled: true
     ingressController:
-      enabled: true
-      default: true
+      enabled: false
+      default: false
     egressGateway:
       enabled: true
     bpf:
