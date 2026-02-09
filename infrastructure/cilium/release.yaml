@@ -17,6 +17,12 @@ spec:
       interval: 10m
   values:
     hubble:
+      tls:
+        auto:
+          enabled: true
+          method: cronJob
+          certValidDuration: 1095
+          schedule: 0 0 */4 *
       enabled: true
       relay:
         enabled: true
