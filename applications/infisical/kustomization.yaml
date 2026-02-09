@@ -4,6 +4,4 @@ kind: Kustomization
 resources: 
   - source.yaml
   - namespace.yaml
-  - grafana-release.yaml
-  # - loki-release.yaml
-  - mimir-release.yaml
+  - release.yaml

@@ -1,0 +1,76 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: observability
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: loki-simple-scalable
+      version: '1.8.11'
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-helm
+        namespace: observability
+      interval: 10m
+  values:
+    loki:
+      schemaConfig:
+        configs:
+          - from: "2024-04-01"
+            store: tsdb
+            object_store: s3
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
+      storage_config:
+        aws:
+          region: <AWS region your bucket is in, for example, `eu-west-2`>
+          bucketnames: <Your AWS bucket for chunk, for example, `aws-loki-dev-chunk`>
+          s3forcepathstyle: false
+      pattern_ingester:
+          enabled: true
+      limits_config:
+        allow_structured_metadata: true
+        volume_enabled: true
+        retention_period: 672h # 28 days retention
+      querier:
+        max_concurrent: 4
+
+      storage:
+        type: s3
+        bucketNames:
+            chunks: <Your AWS bucket for chunk, for example, `aws-loki-dev-chunk`>
+            ruler: <Your AWS bucket for ruler, for example,  `aws-loki-dev-ruler`>
+            admin: <Your AWS bucket for admin, for example,  `aws-loki-dev-admin`>
+        s3:
+          # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storages or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
+          s3: s3://access_key:secret_access_key@custom_endpoint/bucket_name
+          # AWS endpoint URL
+          endpoint: <your-endpoint>
+          # AWS region where the S3 bucket is located
+          region: <your-region>
+          # AWS secret access key
+          secretAccessKey: <your-secret-access-key>
+          # AWS access key ID
+          accessKeyId: <your-access-key-id>
+          # AWS signature version (e.g., v2 or v4)
+          signatureVersion: <your-signature-version>
+          # Forces the path style for S3 (true/false)
+          s3ForcePathStyle: false
+          # Allows insecure (HTTP) connections (true/false)
+          insecure: false
+          # HTTP configuration settings
+          http_config: {}
+
+    deploymentMode: SimpleScalable
+
+    backend:
+      replicas: 3
+    read:
+      replicas: 3
+    write:
+      replicas: 3
