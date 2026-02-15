@@ -8,7 +8,7 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: external-secrets-helm
+      chart: external-secrets
       version: '2.0.0'
       sourceRef:
         kind: HelmRepository
