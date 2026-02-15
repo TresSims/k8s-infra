@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: grafana-helm
-        namespace: observability
+        namespace: o11y
       interval: 10m
   values:
     ingress:

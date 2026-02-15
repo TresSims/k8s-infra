@@ -24,17 +24,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: observability-s3-endpoint
+              key: o11y-s3-endpoint
         - name: OBSERVABILITY-S3-ACCESS-KEY
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: observability-s3-access-key
+              key: o11y-s3-access-key
         - name: OBSERVABILITY-S3-SECRET-KEY
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: observability-s3-secret-key
+              key: o11y-s3-secret-key
     loki:
       schemaConfig:
         configs:

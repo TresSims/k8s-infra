@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: grafana-helm
-  namespace: observability
+  namespace: o11y
 spec:
   interval: 1m0s
   url: https://grafana.github.io/helm-charts
