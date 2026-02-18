@@ -17,6 +17,7 @@ spec:
       interval: 10m
   values:
     global:
+      dnsService: coredns
       extraArgs:
         - config.expand-env=true
       extraEnv:
@@ -84,7 +85,7 @@ spec:
       zoneAwareReplication:
         enabled: false
     querier:
-      replicas: 3
+      replicas: 2
       maxUnavailable: 2
     queryFrontend:
       replicas: 2
@@ -92,7 +93,7 @@ spec:
     queryScheduler:
       replicas: 2
     distributor:
-      replicas: 3
+      replicas: 2
       maxUnavailable: 2
     compactor:
       replicas: 1
