@@ -8,7 +8,7 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: mimir
+      chart: mimir-distributed
       version: '6.0.5'
       sourceRef:
         kind: HelmRepository
