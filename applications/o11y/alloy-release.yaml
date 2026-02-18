@@ -16,6 +16,9 @@ spec:
         namespace: o11y
       interval: 10m
   values:
+    global:
+      dnsService: coredns
+      
     alertmanager:
       persistentVolume:
         enabled: true
