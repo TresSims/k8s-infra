@@ -8,4 +8,5 @@ resources:
   - namespace.yaml
   - grafana-release.yaml
   - loki-release.yaml
+  - alloy-release.yaml
   # - mimir-release.yaml
