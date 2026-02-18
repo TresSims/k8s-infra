@@ -48,7 +48,7 @@ spec:
       storage_config:
         aws:
           region: garage
-          bucketnames: loki
+          bucketnames: observability
           s3forcepathstyle: false
       ingester:
           chunk_encoding: snappy
@@ -63,8 +63,13 @@ spec:
 
       storage:
         type: s3
+        bucketNames:
+          chunks: observability
+          ruler: observability
+          admin: observability
         s3:
           endpoint: ${OBSERVABILITY_S3_ENDPOINT}
+          region: garage
           secretAccessKey: ${OBSERVABILITY_S3_ACCESS_KEY}
           accessKeyId: ${OBSERVABILITY_S3_SECRET_KEY}
 
