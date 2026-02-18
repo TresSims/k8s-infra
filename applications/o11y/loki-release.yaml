@@ -23,17 +23,17 @@ spec:
         - name: OBSERVABILITY_S3_ENDPOINT
           valueFrom:
             secretKeyRef:
-              name: loki-secrets
+              name: s3-credentials
               key: endpoint
-        - name: OBSERVABILITY_S3_ACCESS-KEY
+        - name: OBSERVABILITY_S3_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: loki-secrets
+              name: s3-credentials
               key: access_key
-        - name: OBSERVABILITY_S3-SECRET-KEY
+        - name: OBSERVABILITY_S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: loki-secrets
+              name: s3-credentials
               key: secret_key
     loki:
       schemaConfig:
@@ -64,9 +64,9 @@ spec:
       storage:
         type: s3
         s3:
-          endpoint: ${OBSERVABILITY-S3-ENDPOINT}
-          secretAccessKey: ${OBSERVABILITY-S3-ACCESS-KEY}
-          accessKeyId: ${OBSERVABILITY-S3-SECRET-KEY}
+          endpoint: ${OBSERVABILITY_S3_ENDPOINT}
+          secretAccessKey: ${OBSERVABILITY_S3_ACCESS_KEY}
+          accessKeyId: ${OBSERVABILITY_S3_SECRET_KEY}
 
     deploymentMode: Distributed
 
