@@ -20,21 +20,21 @@ spec:
       extraArgs:
         - config.expand-env=true
       extraEnv:
-        - name: OBSERVABILITY-S3-ENDPOINT
+        - name: OBSERVABILITY_S3_ENDPOINT
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: o11y-s3-endpoint
-        - name: OBSERVABILITY-S3-ACCESS-KEY
+              key: endpoint
+        - name: OBSERVABILITY_S3_ACCESS-KEY
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: o11y-s3-access-key
-        - name: OBSERVABILITY-S3-SECRET-KEY
+              key: access_key
+        - name: OBSERVABILITY_S3-SECRET-KEY
           valueFrom:
             secretKeyRef:
               name: loki-secrets
-              key: o11y-s3-secret-key
+              key: secret_key
     loki:
       schemaConfig:
         configs:
