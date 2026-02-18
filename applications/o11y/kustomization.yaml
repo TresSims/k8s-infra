@@ -7,6 +7,6 @@ resources:
   - external-secrets.yaml
   - namespace.yaml
   - grafana-release.yaml
-  - loki-release.yaml
   - alloy-release.yaml
-  # - mimir-release.yaml
+  - loki-release.yaml
+  - mimir-release.yaml
