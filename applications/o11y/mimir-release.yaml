@@ -181,15 +181,17 @@ spec:
           region: garage
           secretAccessKey: ${OBSERVABILITY_S3_ACCESS_KEY}
           accessKeyId: ${OBSERVABILITY_S3_SECRET_KEY}
-    blocks_storage:
-      s3:
-        bucket_name: observability
-    alertmanager_storage:
-      s3:
-        bucket_name: observability
-    ruler_storage:
-      s3:
-        bucket_name: observability
+
+    mimir:
+      blocks_storage:
+        s3:
+          bucket_name: observability
+      alertmanager_storage:
+        s3:
+          bucket_name: observability
+      ruler_storage:
+        s3:
+          bucket_name: observability
 
     gateway:
       replicas: 1
