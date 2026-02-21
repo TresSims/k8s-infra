@@ -175,8 +175,12 @@ spec:
 
     mimir:
       structuredConfig:
+        multitenancy_enabled: false
         ingest_storage:
           enabled: false
+
+        ingester:
+          push_grpc_method_enabled: true
 
         common:
           storage:
