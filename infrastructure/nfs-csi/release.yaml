@@ -24,7 +24,7 @@ spec:
           server: deep-thonk.com
           share: /mnt/plex/k8s
           subDir: data
-          mountPermissions: 0755
+          mountPermissions: "0755"
         reclaimPolicy: Retain
         volumeBindingMode: Immediate
         mountOptions:
