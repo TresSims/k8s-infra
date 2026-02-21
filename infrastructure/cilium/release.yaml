@@ -36,3 +36,5 @@ spec:
     bpf:
       masquerade: true
     kubeProxyReplacement: true
+    k8sServiceHost: 192.168.1.26
+    k8sServicePort: 6443
