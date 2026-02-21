@@ -9,4 +9,4 @@ resources:
   - grafana
   - alloy
   - loki
-  - mimir
+  - victoria-metrics

@@ -1,0 +1,218 @@
+logging {
+  level = "info"
+  format = "logfmt"
+}
+
+discovery.kubernetes "pods" {
+  role = "pod"
+  selectors {
+    role = "pod"
+    field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+  }
+}
+
+discovery.kubernetes "services" {
+  role = "service"
+}
+
+
+// Log Collection
+
+loki.write "k8s" {
+  endpoint {
+    url = "http://loki.o11y.svc.cluster.local:3100/loki/api/v1/push"
+  }
+}
+
+// Node Logs
+
+local.file_match "node_logs" {
+  path_targets = [{
+      __path__ = "/var/log/syslog",
+      job = "node/syslog",
+      node_name = sys.env("HOSTNAME"),
+      cluster = "k8s.deep-thonk",
+  }]
+}
+
+loki.source.file "node_logs" {
+  targets = local.file_match.node_logs.targets
+  forward_to = [loki.write.k8s.receiver]
+}
+
+// Pod Logs
+
+discovery.relabel "pod_logs" {
+  targets = discovery.kubernetes.pods.targets
+
+  // Label creation - "namespace" field from "__meta_kubernetes_namespace"
+  rule {
+    source_labels = ["__meta_kubernetes_namespace"]
+    action = "replace"
+    target_label = "namespace"
+  }
+
+  // Label creation - "pod" field from "__meta_kubernetes_pod_name"
+  rule {
+    source_labels = ["__meta_kubernetes_pod_name"]
+    action = "replace"
+    target_label = "pod"
+  }
+
+  // Label creation - "container" field from "__meta_kubernetes_pod_container_name"
+  rule {
+    source_labels = ["__meta_kubernetes_pod_container_name"]
+    action = "replace"
+    target_label = "container"
+  }
+
+  // Label creation -  "app" field from "__meta_kubernetes_pod_label_app_kubernetes_io_name"
+  rule {
+    source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+    action = "replace"
+    target_label = "app"
+  }
+
+  // Label creation -  "job" field from "__meta_kubernetes_namespace" and "__meta_kubernetes_pod_container_name"
+  // Concatenate values __meta_kubernetes_namespace/__meta_kubernetes_pod_container_name
+  rule {
+    source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+    action = "replace"
+    target_label = "job"
+    separator = "/"
+    replacement = "$1"
+  }
+
+  // Label creation - "__path__" field from "__meta_kubernetes_pod_uid" and "__meta_kubernetes_pod_container_name"
+  // Concatenate values __meta_kubernetes_pod_uid/__meta_kubernetes_pod_container_name.log
+  rule {
+    source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+    action = "replace"
+    target_label = "__path__"
+    separator = "/"
+    replacement = "/var/log/pods/*$1/*.log"
+  }
+
+  // Label creation -  "container_runtime" field from "__meta_kubernetes_pod_container_id"
+  rule {
+    source_labels = ["__meta_kubernetes_pod_container_id"]
+    action = "replace"
+    target_label = "container_runtime"
+    regex = "^(\\S+):\\/\\/.+$"
+    replacement = "$1"
+  }
+}
+
+loki.source.kubernetes "pod_logs" {
+  targets    = discovery.relabel.pod_logs.output
+  forward_to = [loki.process.pod_logs.receiver]
+}
+
+loki.process "pod_logs" {
+  stage.static_labels {
+      values = {
+        cluster = "k8s.deep-thonk",
+      }
+  }
+
+  forward_to = [loki.write.k8s.receiver]
+}
+
+
+// Metrics
+
+
+prometheus.remote_write "vmetrics" {
+  endpoint {
+    url = "http://mimir-victoria-metrics-single-server.o11y.svc.cluster.local:8428/prometheus/api/v1/write"
+  }
+}
+
+discovery.relabel "pods" {
+  targets = discovery.kubernetes.pods.targets
+
+  rule {
+    source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
+    action        = "keep"
+    regex         = "true"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_path"]
+    action        = "replace"
+    target_label  = "__metrics_path__"
+    regex         = "(.+)"
+  }
+
+  rule {
+    source_labels = ["__address__", "__meta_kubernetes_pod_annotation_prometheus_io_port"]
+    action        = "replace"
+    target_label  = "__address__"
+    regex         = "([^:]+)(?::\\d+)?;(\\d+)"
+    replacement   = "$1:$2"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_namespace"]
+    target_label  = "namespace"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_pod_name"]
+    target_label  = "pod"
+  }
+}
+
+discovery.relabel "services" {
+  targets = discovery.kubernetes.services.targets
+
+  rule {
+    source_labels = ["__meta_kubernetes_service_annotation_prometheus_io_scrape"]
+    action        = "keep"
+    regex         = "true"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_service_annotation_prometheus_io_path"]
+    action        = "replace"
+    target_label  = "__metrics_path__"
+    regex         = "(.+)"
+  }
+
+  rule {
+    source_labels = ["__address__", "__meta_kubernetes_service_annotation_prometheus_io_port"]
+    action        = "replace"
+    target_label  = "__address__"
+    regex         = "([^:]+)(?::\\d+)?;(\\d+)"
+    replacement   = "$1:$2"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_namespace"]
+    target_label  = "namespace"
+  }
+
+  rule {
+    source_labels = ["__meta_kubernetes_service_name"]
+    target_label  = "service"
+  }
+}
+
+// Scrape pods
+prometheus.scrape "pods" {
+  targets    = discovery.relabel.pods.output
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+// Scrape services
+prometheus.scrape "services" {
+  targets    = discovery.relabel.services.output
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+// Remote write to your Prometheus/Mimir endpoint
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://mimir-victoria-metrics-single-server.o11y.svc.cluster.local:8428/api/v1/write"
+  }
+}
