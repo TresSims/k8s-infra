@@ -181,6 +181,8 @@ spec:
 
         ingester:
           push_grpc_method_enabled: true
+          ring:
+            replication_factor: 1
 
         common:
           storage:
