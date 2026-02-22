@@ -24,22 +24,6 @@ loki.write "k8s" {
   }
 }
 
-// Node Logs
-
-local.file_match "node_logs" {
-  path_targets = [{
-      __path__ = "/var/log/syslog",
-      job = "node/syslog",
-      node_name = sys.env("HOSTNAME"),
-      cluster = "k8s.deep-thonk",
-  }]
-}
-
-loki.source.file "node_logs" {
-  targets = local.file_match.node_logs.targets
-  forward_to = [loki.write.k8s.receiver]
-}
-
 // Pod Logs
 
 discovery.relabel "pod_logs" {
@@ -161,10 +145,22 @@ discovery.relabel "pods" {
     source_labels = ["__meta_kubernetes_pod_name"]
     target_label  = "pod"
   }
+
+  rule {
+    action = "replace"
+    replacement = "k8s.deep-thonk"
+    target_label = "cluster"
+  }
 }
 
 discovery.relabel "services" {
   targets = discovery.kubernetes.services.targets
+
+  rule {
+    action = "replace"
+    replacement = "k8s.deep-thonk"
+    target_label = "cluster"
+  }
 
   rule {
     source_labels = ["__meta_kubernetes_service_annotation_prometheus_io_scrape"]
