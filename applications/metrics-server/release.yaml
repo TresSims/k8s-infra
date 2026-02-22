@@ -16,6 +16,9 @@ spec:
         namespace: kube-system
       interval: 10m
   values:
+    prometheus:
+      monitor:
+        enabled: true
     metrics:
       enabled: true
     serviceMonitor:

@@ -212,3 +212,62 @@ prometheus.remote_write "default" {
     url = "http://mimir-victoria-metrics-single-server.o11y.svc.cluster.local:8428/api/v1/write"
   }
 }
+
+// kubernetes metrics
+discovery.kubernetes "apiserver" {
+  role = "endpoints"
+
+  namespaces {
+    names = ["default"]
+  }
+  
+  selectors {
+    role = "enpoints"
+    label = "component=apiserver,provider=kubernetes"
+  }
+}
+
+discovery.relabel "apiserver" {
+  targets = discovery.kubernetes.apiserver.targets
+
+  rule {
+    source_labels = ["__meta_kubernetes_endpoint_port_name"]
+    regex = "https"
+    action = "keep" 
+  }
+
+  rule {
+    target_label = "__scheme__"
+    replacement = "https"
+  }
+
+  rule {
+    target_label = "__metrics_path__"
+    replacement  = "/metrics"
+  }
+
+  rule {
+    target_label = "job"
+    replacement  = "apiserver"
+  }
+
+  rule {
+    action = "replace"
+    replacement = "k8s.deep-thonk"
+    target_label = "cluster"
+  }
+}
+
+prometheus.scrape "apiserver" {
+  targets    = discovery.relabel.apiserver.output
+  forward_to = [prometheus.remote_write.vmetrics.receiver]
+
+  scheme                 = "https"
+  bearer_token_file      = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+  tls_config {
+    ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+    insecure_skip_verify = false
+  }
+
+  scrape_interval = "30s"
+}
