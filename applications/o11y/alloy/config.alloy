@@ -116,6 +116,12 @@ discovery.relabel "pods" {
   targets = discovery.kubernetes.pods.targets
 
   rule {
+    action = "replace"
+    replacement = "k8s.deep-thonk"
+    target_label = "cluster"
+  }
+
+  rule {
     source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
     action        = "keep"
     regex         = "true"
@@ -146,11 +152,11 @@ discovery.relabel "pods" {
     target_label  = "pod"
   }
 
-  rule {
-    action = "replace"
-    replacement = "k8s.deep-thonk"
-    target_label = "cluster"
-  }
+	rule {
+		action = "replace"
+		target_label = "job"	
+		replacement = "prometheus"
+	}
 }
 
 discovery.relabel "services" {
@@ -164,7 +170,7 @@ discovery.relabel "services" {
 
   rule {
     source_labels = ["__meta_kubernetes_service_annotation_prometheus_io_scrape"]
-    action        = "keep"
+		action        = "keep"
     regex         = "true"
   }
 
@@ -192,25 +198,24 @@ discovery.relabel "services" {
     source_labels = ["__meta_kubernetes_service_name"]
     target_label  = "service"
   }
+
+	rule {
+		action = "replace"
+		target_label = "job"	
+		replacement = "prometheus"
+	}
 }
 
 // Scrape pods
 prometheus.scrape "pods" {
   targets    = discovery.relabel.pods.output
-  forward_to = [prometheus.remote_write.default.receiver]
+  forward_to = [prometheus.remote_write.vmetrics.receiver]
 }
 
 // Scrape services
 prometheus.scrape "services" {
   targets    = discovery.relabel.services.output
-  forward_to = [prometheus.remote_write.default.receiver]
-}
-
-// Remote write to your Prometheus/Mimir endpoint
-prometheus.remote_write "default" {
-  endpoint {
-    url = "http://mimir-victoria-metrics-single-server.o11y.svc.cluster.local:8428/api/v1/write"
-  }
+  forward_to = [prometheus.remote_write.vmetrics.receiver]
 }
 
 // kubernetes metrics

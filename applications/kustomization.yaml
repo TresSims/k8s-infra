@@ -6,3 +6,4 @@ resources:
   - vault
   - node-exporter
   - metrics-server
+  - cadvisor
