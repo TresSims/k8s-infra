@@ -1,3 +1,3 @@
-# K8S Infra
+# Deep-Thonk Flux
 
-This repository contains my kubernetes infrastructure as code.
+Because running kubectl commands is hard.
