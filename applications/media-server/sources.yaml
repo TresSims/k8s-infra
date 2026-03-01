@@ -6,4 +6,4 @@ metadata:
   namespace: media-server
 spec:
   interval: 1m0s
-  url: https://raw.githubusercontent.com/plexing/pms-docker/gh-pages
+  url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
