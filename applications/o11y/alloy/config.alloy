@@ -284,13 +284,3 @@ prometheus.scrape "apiserver" {
 
   scrape_interval = "30s"
 }
-
-// remote collection
-// remotely collected logs and metrics *should* be enriched at the source
-loki.source.api "remote" {
-  forward_to = [loki.write.k8s.receiver]
-}
-
-prometheus.receive_http "remote" {
-  forward_to = [prometheus.remote_write.vmetrics.receiver]
-}
