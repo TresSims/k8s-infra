@@ -15,6 +15,6 @@ spec:
     - notification-controller
   sync:
     kind: OCIRepository
-    url: oci://ghcr.io/tressims/k8s-infra
+    url: oci://ghcr.io/tressims/deep-thonk-flux
     ref: latest
     path: .
