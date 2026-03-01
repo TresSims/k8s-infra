@@ -19,6 +19,7 @@ spec:
     ingress:
       enabled: true
       url: https://plex.k8s.deep-thonk.com
+      ingressClassName: traefik
       annotations:
         cert-manager.io/cluster-issuer: "letsencrypt-prod"
     pms:
