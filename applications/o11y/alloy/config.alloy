@@ -108,7 +108,7 @@ loki.process "pod_logs" {
 
 prometheus.remote_write "vmetrics" {
   endpoint {
-    url = "http://mimir-victoria-metrics-single-server.o11y.svc.cluster.local:8428/prometheus/api/v1/write"
+    url = "http://victoria-metrics-victoria-metrics-single-server.o11y.svc.cluster.local:8428/prometheus/api/v1/write"
   }
 }
 
