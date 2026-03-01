@@ -20,6 +20,8 @@ spec:
       enabled: true
       name: victoria-metrics-single
       replicaCount: 1
+      persistentVolume:
+        name: vm-metrics
       extraArgs:
         envflag.enable: true
         envflag.prefix: VM_
