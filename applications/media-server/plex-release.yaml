@@ -24,3 +24,6 @@ spec:
         cert-manager.io/cluster-issuer: "letsencrypt-prod"
     pms:
       configStorage: 10Gi
+    extraEnv:
+      PLEX_UID: 65534
+      PLEX_GID: 65534
