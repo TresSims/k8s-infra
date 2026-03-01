@@ -16,27 +16,3 @@ spec:
         namespace: o11y
       interval: 10m
   values:
-    server:
-      enabled: true
-      name: victoria-metrics-single
-      replicaCount: 1
-      persistentVolume:
-        name: vm-metrics
-      extraArgs:
-        envflag.enable: true
-        envflag.prefix: VM_
-        loggerFormat: json
-        httpListenAddr: :8428
-
-      # -- Env vaiables
-      # -- Additional environment variables (ex.: secret tokens, flags). Check [here](https://docs.victoriametrics.com/victoriametrics/#environment-variables) for more details
-      env: []
-
-      # -- Specify alternative source for env variables
-      envFrom: []
-        #- configMapRef:
-        #    name: special-config
-
-      persistentVolume:
-        # -- Create/use Persistent Volume Claim for server component. Empty dir if false
-        enabled: true
