@@ -1,0 +1,43 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+  namespace: auth
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: lldap
+      version: '0.4.0'
+      sourceRef:
+        kind: HelmRepository
+        name: lldap-helm
+        namespace: auth
+      interval: 10m
+  values:
+    hpa:
+      enabled: false
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations: 
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      hosts:
+        - host: "lldap.k8s.deep-thonk.com"
+          paths:
+            - path: "/"
+              pathType: "Prefix"
+      tls:
+        - secretName: "lldap-secret-tls"
+          hosts:
+            - "lldap.k8s.deep-thonk.com"
+      env:
+        GID: 65534
+        UID: 65534
+        LDAPS_OPTIONS__ENABLED: false
+
+    secret:
+      create: false
+      useExisting: true
+      name: lldap-credentials

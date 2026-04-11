@@ -7,4 +7,3 @@ resources:
   - node-exporter
   - metrics-server
   - cadvisor
-  - media-server
